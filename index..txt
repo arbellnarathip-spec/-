@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💰 การเงิน — ค่ายหล่อ(ว์)เกียร์ Intania ครั้งที่ 12</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Mitr:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink-50:#fff0f6;--pink-100:#ffd6e7;--pink-200:#ffadd2;
+      --pink-400:#f759ab;--pink-500:#eb2f96;
+      --rose:#ff6b9d;--blush:#ffb3c6;--cream:#fff8fb;
+      --text-main:#3d1c2e;--text-sub:#a07090;--border:#f5c6d8;
+      --green:#34a853;--red:#e8334a;
+      --shadow-s:0 2px 12px rgba(235,47,150,.08);
+      --shadow-m:0 6px 28px rgba(235,47,150,.13);
+      --shadow-l:0 16px 48px rgba(235,47,150,.18);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--text-main);min-height:100vh;overflow-x:hidden}
+    .blob{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(60px);opacity:.4}
+    .blob-1{width:500px;height:500px;top:-150px;right:-120px;background:#ffd6e7}
+    .blob-2{width:340px;height:340px;bottom:-90px;left:-90px;background:#ffb3c6}
+    header{position:sticky;top:0;z-index:200;background:rgba(255,248,251,.85);backdrop-filter:blur(16px);border-bottom:1.5px solid var(--border)}
+    .header-inner{max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:72px}
+    .logo-wrap{display:flex;align-items:center;gap:.75rem;flex-shrink:0}
+    .logo-img{width:48px;height:48px;border-radius:12px;object-fit:cover;border:2px solid var(--border);box-shadow:var(--shadow-s);background:var(--pink-50)}
+    .logo-fallback{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--pink-100),var(--blush));display:none;align-items:center;justify-content:center;font-size:1.4rem;border:2px solid var(--border);flex-shrink:0}
+    .logo-title{font-family:'Mitr',sans-serif;font-weight:600;font-size:1rem;color:var(--pink-500)}
+    .logo-sub{font-size:.72rem;color:var(--text-sub)}
+    .header-spacer{flex:1}
+    .header-actions{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+    .admin-chip{display:none;align-items:center;gap:.3rem;background:linear-gradient(135deg,#fce7f3,#fbcfe8);color:var(--pink-500);border-radius:999px;padding:.28rem .85rem;font-size:.78rem;font-weight:600;border:1.5px solid var(--blush)}
+    .admin-chip.show{display:inline-flex}
+    .btn{display:inline-flex;align-items:center;gap:.35rem;padding:.48rem 1.1rem;border-radius:999px;border:none;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:.88rem;font-weight:500;transition:all .2s;white-space:nowrap}
+    .btn-primary{background:linear-gradient(135deg,#ff6b9d,#f759ab);color:#fff;box-shadow:0 2px 12px rgba(235,47,150,.28)}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(235,47,150,.38)}
+    .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .btn-outline{background:#fff;border:1.5px solid var(--border);color:var(--text-sub)}
+    .btn-outline:hover{border-color:var(--rose);color:var(--rose);background:var(--pink-50)}
+    .btn-ghost{background:transparent;color:var(--text-sub);padding:.4rem .75rem}
+    .btn-ghost:hover{color:var(--rose);background:var(--pink-50)}
+    main{max-width:1200px;margin:0 auto;padding:1.75rem 1.5rem 5rem;position:relative;z-index:1}
+    .dept-tabs-wrap{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+    .dept-tab{display:flex;align-items:center;gap:.4rem;padding:.5rem 1.1rem;border-radius:999px;border:2px solid transparent;background:#fff;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:.88rem;font-weight:500;color:var(--text-sub);transition:all .2s;box-shadow:var(--shadow-s)}
+    .dept-tab .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .dept-tab:hover{transform:translateY(-1px);box-shadow:var(--shadow-m)}
+    .dept-tab.active{color:#fff}
+    .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+    .sum-card{background:#fff;border-radius:18px;padding:1.25rem 1.4rem;border:1.5px solid var(--border);box-shadow:var(--shadow-s);transition:box-shadow .2s,transform .2s;animation:fadeUp .4s ease both}
+    .sum-card:nth-child(2){animation-delay:.05s}.sum-card:nth-child(3){animation-delay:.1s}.sum-card:nth-child(4){animation-delay:.15s}
+    .sum-card:hover{box-shadow:var(--shadow-m);transform:translateY(-2px)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .sum-label{font-size:.75rem;color:var(--text-sub);font-weight:600;letter-spacing:.04em;margin-bottom:.45rem}
+    .sum-value{font-family:'Mitr',sans-serif;font-size:1.55rem;font-weight:600}
+    .sum-value.income{color:var(--green)}.sum-value.expense{color:var(--red)}.sum-value.balance{color:var(--pink-500)}
+    .sum-sub{font-size:.75rem;color:var(--text-sub);margin-top:.2rem}
+    .filter-bar{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin-bottom:1.1rem}
+    .search-wrap{position:relative;flex:1;min-width:180px}
+    .search-wrap input{width:100%;padding:.52rem 1rem .52rem 2.25rem;border-radius:999px;border:1.5px solid var(--border);background:#fff;font-family:'Sarabun',sans-serif;font-size:.88rem;color:var(--text-main);outline:none;transition:border .2s}
+    .search-wrap input:focus{border-color:var(--rose)}
+    .search-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--text-sub);pointer-events:none}
+    .filter-select{padding:.52rem 1rem;border-radius:999px;border:1.5px solid var(--border);background:#fff;font-family:'Sarabun',sans-serif;font-size:.88rem;color:var(--text-main);outline:none;cursor:pointer}
+    .filter-select:focus{border-color:var(--rose)}
+    .table-card{background:#fff;border-radius:20px;border:1.5px solid var(--border);box-shadow:var(--shadow-s);overflow:hidden}
+    .table-topbar{padding:1.1rem 1.5rem;border-bottom:1.5px solid var(--pink-50);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .table-topbar-left{display:flex;align-items:center;gap:.6rem}
+    .dept-dot-header{width:10px;height:10px;border-radius:50%}
+    .table-title{font-family:'Mitr',sans-serif;font-size:.98rem;font-weight:500}
+    .row-count{font-size:.78rem;color:var(--text-sub)}
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:.75rem 1rem;text-align:left;font-size:.76rem;font-weight:700;color:var(--text-sub);letter-spacing:.05em;background:var(--pink-50);border-bottom:1.5px solid var(--border);white-space:nowrap}
+    tbody tr{border-bottom:1px solid #fff5f9;transition:background .12s}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:#fff8fb}
+    tbody td{padding:.85rem 1rem;font-size:.88rem;vertical-align:middle}
+    .type-badge{display:inline-flex;align-items:center;gap:.25rem;padding:.2rem .6rem;border-radius:999px;font-size:.76rem;font-weight:600}
+    .badge-in{background:#ecfdf5;color:#059669;border:1px solid #a7f3d0}
+    .badge-out{background:#fff1f2;color:#e11d48;border:1px solid #fecdd3}
+    .amt-in{color:var(--green);font-weight:600;font-family:'Mitr',sans-serif}
+    .amt-out{color:var(--red);font-weight:600;font-family:'Mitr',sans-serif}
+    .amt-bal{color:var(--text-main);font-weight:500;font-family:'Mitr',sans-serif}
+    .cell-name{font-weight:500}
+    .cell-note{color:var(--text-sub);font-size:.82rem;max-width:160px}
+    .cell-date{color:var(--text-sub);font-size:.82rem;white-space:nowrap}
+    .slip-btn{display:inline-flex;align-items:center;gap:.25rem;padding:.28rem .7rem;border-radius:999px;background:var(--pink-50);color:var(--rose);border:1.5px solid var(--blush);font-size:.78rem;cursor:pointer;font-family:'Sarabun',sans-serif;font-weight:500;text-decoration:none;transition:all .18s}
+    .slip-btn:hover{background:var(--pink-100);border-color:var(--rose)}
+    .no-slip{color:var(--border);font-size:.8rem}
+    .table-empty{text-align:center;padding:3.5rem 2rem;color:var(--text-sub)}
+    .table-empty .icon{font-size:2.5rem;margin-bottom:.6rem}
+    .loading-msg td{text-align:center;padding:2rem;color:var(--text-sub)}
+    .modal-backdrop{display:none;position:fixed;inset:0;z-index:300;background:rgba(61,28,46,.38);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1rem}
+    .modal-backdrop.open{display:flex}
+    .modal{background:#fff;border-radius:24px;padding:2rem;width:100%;max-width:460px;box-shadow:var(--shadow-l);border:1.5px solid var(--border);animation:slideUp .22s ease;max-height:90vh;overflow-y:auto}
+    @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .modal-title{font-family:'Mitr',sans-serif;font-size:1.15rem;font-weight:600;color:var(--text-main);margin-bottom:.2rem}
+    .modal-sub{color:var(--text-sub);font-size:.83rem;margin-bottom:1.4rem}
+    .form-group{margin-bottom:.9rem}
+    .form-label{display:block;font-size:.82rem;font-weight:600;color:var(--text-sub);margin-bottom:.3rem;letter-spacing:.02em}
+    .form-input{width:100%;padding:.6rem .95rem;border-radius:12px;border:1.5px solid var(--border);font-family:'Sarabun',sans-serif;font-size:.92rem;color:var(--text-main);outline:none;transition:border .2s;background:#fff}
+    .form-input:focus{border-color:var(--rose)}
+    select.form-input{cursor:pointer}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    .modal-footer{display:flex;gap:.65rem;margin-top:1.4rem;justify-content:flex-end}
+    .err-msg{color:var(--red);font-size:.8rem;margin-top:.4rem;display:none}
+    .err-msg.show{display:block}
+    .slip-modal{background:#fff;border-radius:24px;padding:1.5rem;width:100%;max-width:480px;box-shadow:var(--shadow-l);border:1.5px solid var(--border);animation:slideUp .22s ease}
+    .slip-modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+    @media(max-width:768px){.summary-grid{grid-template-columns:1fr 1fr}.logo-sub{display:none}thead th:nth-child(9),tbody td:nth-child(9){display:none}}
+    @media(max-width:520px){main{padding:1rem .75rem 4rem}.form-row{grid-template-columns:1fr}.logo-title{font-size:.85rem}}
+  </style>
+</head>
+<body>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <img class="logo-img"
+        src="https://drive.google.com/thumbnail?id=1JkF6t_Pb-NiergzLbKXBTz0P43CebXNi&sz=w200"
+        alt="โลโก้ค่าย"
+        onerror="this.style.display='none';document.getElementById('lf').style.display='flex'">
+      <div class="logo-fallback" id="lf">🏕️</div>
+      <div>
+        <div class="logo-title">ค่ายหล่อ(ว์)เกียร์ Intania ครั้งที่ 12</div>
+        <div class="logo-sub">ระบบบัญชีการเงิน — ดูได้ทุกคน แก้ไขได้เฉพาะการเงิน</div>
+      </div>
+    </div>
+    <div class="header-spacer"></div>
+    <div class="header-actions">
+      <span class="admin-chip" id="adminChip">✨ Admin Mode</span>
+      <button class="btn btn-outline" id="addBtn" style="display:none" onclick="openAddModal()">➕ เพิ่มรายการ</button>
+      <button class="btn btn-ghost" id="loginBtn" onclick="openModal('loginModal')">🔐 Admin</button>
+      <button class="btn btn-ghost" id="logoutBtn" style="display:none" onclick="logout()">ออกจากระบบ</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="dept-tabs-wrap" id="deptTabs"></div>
+
+  <div class="summary-grid">
+    <div class="sum-card">
+      <div class="sum-label">💚 รายรับทั้งหมด</div>
+      <div class="sum-value income" id="sumIncome">฿0</div>
+      <div class="sum-sub" id="sumIncomeCount">0 รายการ</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">❤️ รายจ่ายทั้งหมด</div>
+      <div class="sum-value expense" id="sumExpense">฿0</div>
+      <div class="sum-sub" id="sumExpenseCount">0 รายการ</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">🌸 ยอดคงเหลือ</div>
+      <div class="sum-value balance" id="sumBalance">฿0</div>
+      <div class="sum-sub">ล่าสุด</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">📋 รายการทั้งหมด</div>
+      <div class="sum-value" id="sumCount" style="color:var(--text-main)">0</div>
+      <div class="sum-sub">รายการ</div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="ค้นหารายการ..." oninput="renderTable()">
+    </div>
+    <select class="filter-select" id="typeFilter" onchange="renderTable()">
+      <option value="">ทุกประเภท</option>
+      <option value="รายรับ">รายรับ</option>
+      <option value="รายจ่าย">รายจ่าย</option>
+    </select>
+    <button class="btn btn-outline" onclick="exportSheet()">📊 เปิด Google Sheets</button>
+    <button class="btn btn-ghost" onclick="loadData()" title="รีเฟรช">🔄</button>
+  </div>
+
+  <div class="table-card">
+    <div class="table-topbar">
+      <div class="table-topbar-left">
+        <div class="dept-dot-header" id="deptDot"></div>
+        <span class="table-title" id="tableTitle">รายการทั้งหมด</span>
+      </div>
+      <span class="row-count" id="rowCount"></span>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>วันที่</th><th>ประเภท</th><th>รายการ</th>
+            <th>รายรับ (฿)</th><th>รายจ่าย (฿)</th><th>คงเหลือ (฿)</th>
+            <th>สลิป</th><th>หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr class="loading-msg"><td colspan="9">⏳ กำลังโหลดข้อมูล...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- LOGIN -->
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal">
+    <div class="modal-title">🔐 เข้าสู่ระบบ Admin</div>
+    <div class="modal-sub">เฉพาะฝ่ายการเงินของแต่ละฝ่ายเท่านั้น</div>
+    <div class="form-group">
+      <label class="form-label">รหัสผ่าน</label>
+      <input type="password" class="form-input" id="pwInput" placeholder="กรอกรหัสผ่าน" onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="err-msg" id="loginErr">❌ รหัสผ่านไม่ถูกต้อง</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('loginModal')">ยกเลิก</button>
+      <button class="btn btn-primary" onclick="doLogin()">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD -->
+<div class="modal-backdrop" id="addModal">
+  <div class="modal">
+    <div class="modal-title">➕ เพิ่มรายการการเงิน</div>
+    <div class="modal-sub">บันทึกรายการใหม่เข้า Google Sheets ของฝ่ายที่เลือก</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">วันที่ *</label>
+        <input type="date" class="form-input" id="eDate">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ประเภท *</label>
+        <select class="form-input" id="eType">
+          <option value="รายรับ">💚 รายรับ</option>
+          <option value="รายจ่าย">❤️ รายจ่าย</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ฝ่าย *</label>
+      <select class="form-input" id="eDept"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">รายการ *</label>
+      <input type="text" class="form-input" id="eName" placeholder="เช่น ค่าอาหารกลางวัน">
+    </div>
+    <div class="form-group">
+      <label class="form-label">จำนวนเงิน (฿) *</label>
+      <input type="number" class="form-input" id="eAmount" placeholder="0.00" min="0" step="0.01">
+    </div>
+    <div class="form-group">
+      <label class="form-label">ลิงก์สลิป (Google Drive)</label>
+      <input type="url" class="form-input" id="eSlip" placeholder="https://drive.google.com/...">
+    </div>
+    <div class="form-group">
+      <label class="form-label">หมายเหตุ</label>
+      <input type="text" class="form-input" id="eNote" placeholder="(ไม่บังคับ)">
+    </div>
+    <div class="err-msg" id="addErr">❌ กรุณากรอกข้อมูลให้ครบถ้วน</div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addModal')">ยกเลิก</button>
+      <button class="btn btn-primary" id="saveBtn" onclick="saveEntry()">💾 บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- SLIP -->
+<div class="modal-backdrop" id="slipModal">
+  <div class="slip-modal">
+    <div class="slip-modal-head">
+      <div class="modal-title">🧾 สลิปการโอนเงิน</div>
+      <button class="btn btn-ghost" onclick="closeModal('slipModal')">✕</button>
+    </div>
+    <div style="text-align:center">
+      <a id="slipLink" href="#" target="_blank" class="btn btn-primary">🔗 เปิดใน Google Drive</a>
+      <p style="color:var(--text-sub);font-size:.82rem;margin-top:.75rem">คลิกปุ่มด้านบนเพื่อดูสลิปใน Google Drive</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══ CONFIG ══ */
+const CONFIG = {
+  ADMIN_PASSWORD: 'lgi12',
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxK4vlHoCBmgG1eJaPbYlOz-r6JF8ejtC8iMJYbcbR9wlarQPV35rAPIBAMqrJMoFN6/exec',
+  DEPTS: [
+    { name:'ทุกฝ่าย',                   sheetId:'',                sheetName:'',          color:'#f472b6', emoji:'🌸' },
+    { name:'ฝ่ายการเงิน',               sheetId:'1vue2VP7C7Qba_tEeebQEgdERyhY1JK_FQEjeTR4GHEY', sheetName:'ฝ่ายการเงิน',   color:'#f472b6', emoji:'💰' },
+    { name:'ฝ่ายสถานที่',               sheetId:'1vue2VP7C7Qba_tEeebQEgdERyhY1JK_FQEjeTR4GHEY', sheetName:'ฝ่ายสถานที่',   color:'#60a5fa', emoji:'🏕️' },
+    { name:'ฝ่ายสันทนาการ',             sheetId:'1vue2VP7C7Qba_tEeebQEgdERyhY1JK_FQEjeTR4GHEY', sheetName:'ฝ่ายสันทนาการ', color:'#fb923c', emoji:'🎮' },
+    { name:'ฝ่ายสวัสดิการและพยาบาล',   sheetId:'1vue2VP7C7Qba_tEeebQEgdERyhY1JK_FQEjeTR4GHEY', sheetName:'ฝ่ายสวัสดิการและพยาบาล', color:'#34d399', emoji:'🏥' },
+    { name:'ฝ่ายมินิมาร์ทและจัดหาทุน', sheetId:'1vue2VP7C7Qba_tEeebQEgdERyhY1JK_FQEjeTR4GHEY', sheetName:'ฝ่ายมินิมาร์ทและจัดหาทุน', color:'#a78bfa', emoji:'🛒' },
+  ]
+};
+
+let allData=[], isAdmin=false, activeDept=0;
+
+document.addEventListener('DOMContentLoaded',()=>{
+  buildTabs(); buildDeptSelect();
+  if(sessionStorage.getItem('adminAuth')==='true'){isAdmin=true;updateAdminUI();}
+  document.getElementById('eDate').value=todayStr();
+  loadData();
+});
+
+function todayStr(){return new Date().toISOString().split('T')[0];}
+
+function buildTabs(){
+  document.getElementById('deptTabs').innerHTML=CONFIG.DEPTS.map((d,i)=>`
+    <button class="dept-tab ${i===0?'active':''}"
+      style="${i===0?`background:${d.color};border-color:${d.color}`:''}"
+      onclick="switchDept(${i})" data-i="${i}">
+      <span class="dot" style="background:${i===0?'rgba(255,255,255,.7)':d.color}"></span>
+      ${d.emoji} ${d.name}
+    </button>`).join('');
+}
+
+function switchDept(i){
+  activeDept=i;
+  document.querySelectorAll('.dept-tab').forEach((tab,idx)=>{
+    const d=CONFIG.DEPTS[idx];
+    if(idx===i){tab.classList.add('active');tab.style.background=d.color;tab.style.color='#fff';tab.style.borderColor=d.color;tab.querySelector('.dot').style.background='rgba(255,255,255,.7)';}
+    else{tab.classList.remove('active');tab.style.background='';tab.style.color='';tab.style.borderColor='';tab.querySelector('.dot').style.background=d.color;}
+  });
+  loadData();
+}
+
+function buildDeptSelect(){
+  document.getElementById('eDept').innerHTML=CONFIG.DEPTS.slice(1).map((d,i)=>
+    `<option value="${i+1}">${d.emoji} ${d.name}</option>`).join('');
+}
+
+async function loadData(){
+  document.getElementById('tableBody').innerHTML='<tr class="loading-msg"><td colspan="9">⏳ กำลังโหลดข้อมูล...</td></tr>';
+  allData=[];
+  if(activeDept===0){
+    const r=await Promise.all(CONFIG.DEPTS.slice(1).map((d,i)=>fetchSheet(d.sheetId,d.sheetName,i+1)));
+    allData=r.flat().sort((a,b)=>(a.rawDate||0)-(b.rawDate||0));
+  } else {
+    const d=CONFIG.DEPTS[activeDept];
+    allData=await fetchSheet(d.sheetId,d.sheetName,activeDept);
+  }
+  updateHeader(); updateSummary(); renderTable();
+}
+
+async function fetchSheet(sheetId,sheetName,deptIdx){
+  if(!sheetId||sheetId.startsWith('YOUR')) return [];
+  try{
+    const res=await fetch(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`);
+    const text=await res.text();
+    const json=JSON.parse(text.substring(47,text.length-2));
+    return (json.table.rows||[]).map((row,i)=>{
+      const c=row.c;
+      const rd=parseGDate(c[0]?.v);
+      return {idx:i+1,rawDate:rd?rd.getTime():0,date:rd?rd.toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'}):'-',
+        type:c[1]?.v||'',name:c[2]?.v||'',income:parseFloat(c[3]?.v)||0,expense:parseFloat(c[4]?.v)||0,
+        balance:parseFloat(c[5]?.v)||0,slip:c[6]?.v||'',note:c[7]?.v||'',deptIdx};
+    }).filter(r=>r.name);
+  }catch{return [];}
+}
+
+function parseGDate(v){
+  if(!v)return null;
+  if(typeof v==='string'&&v.startsWith('Date(')){const p=v.slice(5,-1).split(',');return new Date(+p[0],+p[1],+p[2]);}
+  return null;
+}
+
+function updateHeader(){
+  const d=CONFIG.DEPTS[activeDept];
+  document.getElementById('deptDot').style.background=d.color;
+  document.getElementById('tableTitle').textContent=`${d.emoji} ${d.name}`;
+}
+
+function updateSummary(){
+  const ti=allData.reduce((s,r)=>s+r.income,0);
+  const te=allData.reduce((s,r)=>s+r.expense,0);
+  const lb=allData.length?allData[allData.length-1].balance:0;
+  document.getElementById('sumIncome').textContent='฿'+fmt(ti);
+  document.getElementById('sumExpense').textContent='฿'+fmt(te);
+  document.getElementById('sumBalance').textContent='฿'+fmt(lb);
+  document.getElementById('sumCount').textContent=allData.length;
+  document.getElementById('sumIncomeCount').textContent=allData.filter(r=>r.income>0).length+' รายการ';
+  document.getElementById('sumExpenseCount').textContent=allData.filter(r=>r.expense>0).length+' รายการ';
+}
+
+function fmt(n){return n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+function renderTable(){
+  const s=document.getElementById('searchInput').value.toLowerCase();
+  const t=document.getElementById('typeFilter').value;
+  const f=allData.filter(r=>(!s||r.name.toLowerCase().includes(s)||r.note.toLowerCase().includes(s))&&(!t||r.type===t));
+  document.getElementById('rowCount').textContent=`แสดง ${f.length} / ${allData.length} รายการ`;
+  const tbody=document.getElementById('tableBody');
+  if(!f.length){tbody.innerHTML='<tr><td colspan="9"><div class="table-empty"><div class="icon">🌸</div><div>ไม่พบรายการ</div></div></td></tr>';return;}
+  tbody.innerHTML=f.map((r,i)=>{
+    const dc=CONFIG.DEPTS[r.deptIdx]?.color||'#f472b6';
+    const dot=activeDept===0?`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${dc};margin-right:5px;vertical-align:middle"></span>`:'';
+    return `<tr>
+      <td style="color:var(--text-sub);font-size:.78rem">${i+1}</td>
+      <td class="cell-date">${r.date}</td>
+      <td><span class="type-badge ${r.type==='รายรับ'?'badge-in':'badge-out'}">${r.type==='รายรับ'?'💚':'❤️'} ${r.type||'-'}</span></td>
+      <td class="cell-name">${dot}${r.name}</td>
+      <td class="amt-in">${r.income>0?'+฿'+fmt(r.income):'<span style="color:var(--border)">—</span>'}</td>
+      <td class="amt-out">${r.expense>0?'-฿'+fmt(r.expense):'<span style="color:var(--border)">—</span>'}</td>
+      <td class="amt-bal">฿${fmt(r.balance)}</td>
+      <td>${r.slip?`<a class="slip-btn" href="#" onclick="openSlip('${r.slip}',event)">🧾 สลิป</a>`:'<span class="no-slip">—</span>'}</td>
+      <td class="cell-note">${r.note||'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function openSlip(url,e){e.preventDefault();document.getElementById('slipLink').href=url;openModal('slipModal');}
+
+function exportSheet(){
+  const d=CONFIG.DEPTS[activeDept];
+  const sid=activeDept===0?CONFIG.DEPTS[1].sheetId:d.sheetId;
+  if(!sid||sid.startsWith('YOUR')){alert('กรุณาตั้งค่า SHEET_ID ก่อนครับ');return;}
+  window.open(`https://docs.google.com/spreadsheets/d/${sid}/edit`,'_blank');
+}
+
+function doLogin(){
+  const pw=document.getElementById('pwInput').value;
+  if(pw===CONFIG.ADMIN_PASSWORD){isAdmin=true;sessionStorage.setItem('adminAuth','true');updateAdminUI();closeModal('loginModal');document.getElementById('pwInput').value='';}
+  else{const el=document.getElementById('loginErr');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
+}
+
+function logout(){isAdmin=false;sessionStorage.removeItem('adminAuth');updateAdminUI();}
+
+function updateAdminUI(){
+  document.getElementById('adminChip').classList.toggle('show',isAdmin);
+  document.getElementById('addBtn').style.display=isAdmin?'inline-flex':'none';
+  document.getElementById('loginBtn').style.display=isAdmin?'none':'inline-flex';
+  document.getElementById('logoutBtn').style.display=isAdmin?'inline-flex':'none';
+}
+
+function openAddModal(){
+  document.getElementById('eDate').value=todayStr();
+  ['eName','eAmount','eSlip','eNote'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('addErr').classList.remove('show');
+  if(activeDept>0)document.getElementById('eDept').value=activeDept;
+  openModal('addModal');
+}
+
+async function saveEntry(){
+  const date=document.getElementById('eDate').value;
+  const type=document.getElementById('eType').value;
+  const deptI=parseInt(document.getElementById('eDept').value);
+  const name=document.getElementById('eName').value.trim();
+  const amount=parseFloat(document.getElementById('eAmount').value);
+  const slip=document.getElementById('eSlip').value.trim();
+  const note=document.getElementById('eNote').value.trim();
+  if(!date||!name||isNaN(amount)||amount<=0){document.getElementById('addErr').classList.add('show');return;}
+  const btn=document.getElementById('saveBtn');
+  btn.textContent='⏳ กำลังบันทึก...';btn.disabled=true;
+  try{
+    const d=CONFIG.DEPTS[deptI];
+    const income=type==='รายรับ'?amount:0,expense=type==='รายจ่าย'?amount:0;
+    const params=new URLSearchParams({date,type,name,income,expense,slip,note,sheetId:d.sheetId,sheetName:d.sheetName});
+    const res=await fetch(CONFIG.SCRIPT_URL+'?'+params.toString());
+    const result=await res.json();
+    if(result.status==='ok'){closeModal('addModal');activeDept=deptI;switchDept(deptI);}
+    else throw new Error(result.message||'บันทึกไม่สำเร็จ');
+  }catch(e){const el=document.getElementById('addErr');el.textContent='❌ '+(e.message||'เกิดข้อผิดพลาด');el.classList.add('show');}
+  finally{btn.textContent='💾 บันทึก';btn.disabled=false;}
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-backdrop').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');}));
+</script>
+</body>
+</html>
